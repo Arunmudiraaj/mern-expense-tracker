@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import styles from "../styles/signup.module.scss";
 import lock from "../assets/lock-2-fill.svg";
+import axios from "axios";
 
 const signup = () => {
   const [auth, setAuth] = useState("signup");
@@ -8,6 +9,7 @@ const signup = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
+  const url = "http://localhost:8080/user";
   const authChangeHandler = () => {
     setAuth((pre) => {
       if (pre === "signup") return "login";
@@ -22,9 +24,38 @@ const signup = () => {
     if (!name || !email || !pass || !confirmPass) return;
 
     // if signup
-    console.log(nameRef.current.value);
-
-    //if login
+    if (auth === "signup") {
+      if (pass.length < 6) {
+        alert("password length must be atleast six characters");
+        return;
+      }
+      if (pass !== confirmPass) {
+        alert("password conformation does not match");
+        return;
+      }
+      axios
+        .post(url + "/signup", {
+          userName: name,
+          password: pass,
+          email: email,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            alert(
+              "Email already exist. Try logging in or use a different email"
+            );
+            return;
+          } else {
+            alert("Something went wrong");
+            return;
+          }
+        });
+    } else {
+      //kk
+    }
   };
   return (
     <>
