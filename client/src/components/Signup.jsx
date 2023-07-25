@@ -83,6 +83,7 @@ const signup = () => {
           });
         })
         .catch((err) => {
+          console.log(err);
           console.log(err.response.data);
           handleShowToastError(err.response.data.message);
         });
