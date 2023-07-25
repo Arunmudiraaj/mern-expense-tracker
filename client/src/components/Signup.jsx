@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import styles from "../styles/signup.module.scss";
 import lock from "../assets/lock-2-fill.svg";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const signup = () => {
   const [auth, setAuth] = useState("signup");
@@ -16,15 +18,24 @@ const signup = () => {
       else return "signup";
     });
   };
+  const handleShowToastError = (msg) => {
+    toast.error(msg, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  };
   const formSubmitHandler = (e) => {
-    const name = nameRef.current.value;
+    e.preventDefault();
+
     const email = emailRef.current.value;
     const pass = passwordRef.current.value;
-    const confirmPass = confirmPasswordRef.current.value;
-    if (!name || !email || !pass || !confirmPass) return;
 
+    if (!email || !pass) return;
     // if signup
     if (auth === "signup") {
+      const name = nameRef.current.value;
+      const confirmPass = confirmPasswordRef.current.value;
+      if (!name || !email || !pass || !confirmPass) return;
       if (pass.length < 6) {
         alert("password length must be atleast six characters");
         return;
@@ -43,18 +54,38 @@ const signup = () => {
           console.log(res);
         })
         .catch((err) => {
+          console.log(err);
           if (err.response.status === 500) {
-            alert(
+            console.log(err.response);
+            handleShowToastError(
               "Email already exist. Try logging in or use a different email"
             );
             return;
           } else {
-            alert("Something went wrong");
+            handleShowToastError("Something went wrong");
             return;
           }
         });
     } else {
-      //kk
+      //k
+      console.log(email, pass);
+      axios
+        .post("http://localhost:8080/user/authentication", {
+          email: email,
+          password: pass,
+        })
+        .then((res) => {
+          console.log(res);
+          // handleShowToastError(res.data.message);
+          toast.success(res.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          handleShowToastError(err.response.data.message);
+        });
     }
   };
   return (
@@ -86,6 +117,7 @@ const signup = () => {
           <span className={styles.forgotPassword}>Forgot password</span>
         )}
         <button type="submit">{auth === "signup" ? "Sign Up" : "Login"}</button>
+        <ToastContainer />
         <span className={styles.login}>
           {auth === "signup"
             ? "Already have an account?"
