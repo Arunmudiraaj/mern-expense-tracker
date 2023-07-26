@@ -1,0 +1,83 @@
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+.container {
+  width: 100%;
+  max-width: 1100px;
+  min-height: 90vh;
+  // background-color: black;
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.options {
+  padding: 2rem;
+  display: grid;
+  grid-template-areas: "one" "two" "three" "four";
+  // grid-template-areas: "one" "two" "three" "four";
+  // width: f;
+  max-width: 95%;
+  margin: 0 auto;
+
+  gap: 1rem;
+  box-sizing: border-box;
+  // justify-content: space-around;
+}
+.one {
+  grid-area: one;
+}
+.two {
+  grid-area: two;
+}
+.three {
+  grid-area: three;
+}
+.four {
+  grid-area: four;
+}
+.listName {
+  text-align: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.table {
+  width: 95%;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  font-family: sans-serif;
+  overflow-x: scroll;
+
+  td {
+    text-align: center;
+    padding: 10px 0;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+}
+
+.deleteBtn {
+  background-color: red;
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+}
+
+@media (max-width: 550px) {
+  .options {
+    grid-template-areas: "one" "two" "three" "four";
+  }
+}
+@media (min-width: 551px) and (max-width: 1200px) {
+  .options {
+    grid-template-areas: "one two" "three four";
+  }
+}
+@media (min-width: 1201px) {
+  .options {
+    grid-template-areas: "one two three four";
+  }
+}

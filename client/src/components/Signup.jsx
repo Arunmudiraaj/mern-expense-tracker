@@ -4,8 +4,10 @@ import lock from "../assets/lock-2-fill.svg";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const signup = () => {
+  const navigate = useNavigate();
   const [auth, setAuth] = useState("signup");
   const nameRef = useRef();
   const emailRef = useRef();
@@ -52,6 +54,11 @@ const signup = () => {
         })
         .then((res) => {
           console.log(res);
+          toast.success("Account created! Log in to continue", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+          setAuth("login");
         })
         .catch((err) => {
           console.log(err);
@@ -77,6 +84,7 @@ const signup = () => {
         .then((res) => {
           console.log(res);
           // handleShowToastError(res.data.message);
+          navigate("/");
           toast.success(res.data.message, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 3000,

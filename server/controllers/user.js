@@ -89,3 +89,10 @@ module.exports.userAuth = (req, res) => {
         .json({ message: "User with the provided email does not exist" });
     });
 };
+
+module.exports.getUsersCount = (req, res) => {
+  User.count().then((result) => {
+    console.log(result);
+    res.json({ count: result });
+  });
+};
