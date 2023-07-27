@@ -1,6 +1,11 @@
 const { where } = require("sequelize");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+
+function getJsonWebToken(id, name) {
+  return jwt.sign({ userId: id, userName: name }, "ArunSecretKey");
+}
 module.exports.userSignUp = (req, res) => {
   const { userName, email, password } = req.body;
   // User.create({
@@ -74,6 +79,7 @@ module.exports.userAuth = (req, res) => {
           res.json({
             success: true,
             message: "User successfully logged in",
+            token: getJsonWebToken(user.id, user.userName),
           });
         } else {
           res.status(401).json({

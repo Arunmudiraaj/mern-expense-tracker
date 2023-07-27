@@ -84,11 +84,8 @@ const signup = () => {
         .then((res) => {
           console.log(res);
           // handleShowToastError(res.data.message);
+          localStorage.setItem("token", res.data.token);
           navigate("/");
-          toast.success(res.data.message, {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
         })
         .catch((err) => {
           console.log(err);

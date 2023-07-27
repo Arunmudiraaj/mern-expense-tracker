@@ -1,7 +1,8 @@
 const Expense = require("../models/expenses");
 module.exports.getAllExpenses = (req, res) => {
-  Expense.findAll().then((result) => {
+  req.user.getExpenses().then((result) => {
     console.log(result);
+    console.log(req.user);
     const data = result.map((ele) => ele.dataValues);
     console.log(data);
 
@@ -10,8 +11,10 @@ module.exports.getAllExpenses = (req, res) => {
 };
 
 module.exports.addExpense = (req, res) => {
-  console.log(req.body);
-  Expense.create(req.body)
+  console.log("Add expense body id", req.body);
+  console.log(req.user);
+  req.user
+    .createExpense(req.body)
     .then((result) => {
       console.log(result);
       res.json(result.dataValues);
@@ -24,9 +27,14 @@ module.exports.addExpense = (req, res) => {
 
 module.exports.deleteExpense = (req, res) => {
   const id = req.params.id;
-  Expense.findByPk(id)
-    .then((e) => {
-      return e.destroy();
+  Expense.findOne({
+    where: {
+      id: id,
+      userId: req.user.dataValues.id,
+    },
+  })
+    .then((toBeDeleted) => {
+      return toBeDeleted.destroy();
     })
     .then((result) => {
       console.log(result);

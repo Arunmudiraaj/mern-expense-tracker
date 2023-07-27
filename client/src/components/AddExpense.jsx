@@ -4,7 +4,7 @@ import axios from "axios";
 const AddExpense = (props) => {
   const descRef = useRef();
   const amountRef = useRef();
-  const dateRef = useRef();
+
   const categoryRef = useRef();
   const closeModalHandler = (e) => {
     if (e.target.id && e.target.id === "backdrop") {
@@ -16,16 +16,19 @@ const AddExpense = (props) => {
     const desc = descRef.current.value;
     const amount = amountRef.current.value;
     const category = categoryRef.current.value;
-    const date = dateRef.current.value;
-    if (!desc || !amount || !category || !date) return;
-    console.log(desc, amount, category, date);
+
+    if (!desc || !amount || !category) return;
+    console.log(desc, amount, category);
     axios
-      .post("http://localhost:8080/expenses/add", {
-        desc: desc,
-        amount: amount,
-        date: date,
-        category,
-      })
+      .post(
+        "http://localhost:8080/expenses/add",
+        {
+          desc: desc,
+          amount: amount,
+          category,
+        },
+        { headers: { Authorization: localStorage.getItem("token") } }
+      )
       .then((res) => {
         console.log(res);
         props.add(res.data);
@@ -62,7 +65,7 @@ const AddExpense = (props) => {
             <option>Education</option>
             <option>Grocessary</option>
           </select>
-          <input type="date" required ref={dateRef} />
+
           <button className={styles.addBtn} onClick={addExpenseHandler}>
             ADD
           </button>

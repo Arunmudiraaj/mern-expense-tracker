@@ -49,7 +49,9 @@ const Home = () => {
   const deleteHandler = (id) => {
     console.log(id);
     axios
-      .delete(url + "/delete/" + id)
+      .delete(url + "/delete/" + id, {
+        headers: { Authorization: localStorage.getItem("token") },
+      })
       .then((res) => {
         deleteExpenseHandler(id);
       })
@@ -58,15 +60,20 @@ const Home = () => {
       });
   };
   useEffect(() => {
-    axios(url + "/all").then((res) => {
-      console.log(res.data);
-      setExpenses(res.data);
-      let total = 0;
-      for (const item of res.data) {
-        total += item.amount;
-      }
-      setTotalAmount(total);
-    });
+    const token = localStorage.getItem("token");
+    axios
+      .get(url + "/all", {
+        headers: { Authorization: token },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setExpenses(res.data);
+        let total = 0;
+        for (const item of res.data) {
+          total += item.amount;
+        }
+        setTotalAmount(total);
+      });
 
     // fetch number of users
     axios("http://localhost:8080/user/count").then((res) => {
