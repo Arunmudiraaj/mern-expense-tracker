@@ -9,6 +9,7 @@ import add from "../assets/add-circle-line.svg";
 import excel from "../assets/file-excel-2-line.svg";
 import { useState } from "react";
 import AddExpense from "./AddExpense";
+import BuyPremium from "./BuyPremium";
 import axios from "axios";
 const Home = () => {
   const [totalAmount, setTotalAmount] = useState(0);
@@ -16,8 +17,12 @@ const Home = () => {
   const url = "http://localhost:8080/expenses";
   const [expenses, setExpenses] = useState([]);
   const [addExpense, setAddExpense] = useState(false);
+  const [buyPremium, setBuyPremium] = useState(false);
   const toggleModal = () => {
     setAddExpense((pre) => !pre);
+  };
+  const toggleBuyPremium = () => {
+    setBuyPremium((pre) => !pre);
   };
   const addExpenseHandler = (obj) => {
     setTotalAmount((pre) => {
@@ -83,6 +88,11 @@ const Home = () => {
   }, []);
   return (
     <div className={styles.container}>
+      <div className={styles.premium} onClick={toggleBuyPremium}>
+        {" "}
+        <button className={styles.premiumBtn}>Buy Premium 👑</button>{" "}
+      </div>
+      {buyPremium && <BuyPremium toggle={toggleBuyPremium} />}
       {addExpense && (
         <AddExpense toggle={toggleModal} add={addExpenseHandler} />
       )}
