@@ -9,9 +9,12 @@
 }
 .modal {
   width: 85%;
-  max-width: 450px;
+  max-width: 600px;
   background-color: white;
-  top: 3rem;
+  top: 10%;
+  max-height: 80%;
+  overflow-y: scroll;
+  // transform: translateY(-50%);
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -60,5 +63,25 @@
   &:hover {
     scale: 1.02;
     box-shadow: 0 0 4px purple;
+  }
+}
+
+.leaderboardTable {
+  width: 95%;
+  margin: 0 auto;
+  padding: 5px;
+  height: 100px;
+  overflow-y: scroll;
+  font-family: sans-serif;
+
+  overflow-x: scroll;
+  padding-top: 2.5rem;
+
+  td {
+    text-align: center;
+    padding: 5px 0;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
   }
 }

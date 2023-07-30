@@ -2,11 +2,14 @@ const Expense = require("../models/expenses");
 module.exports.getAllExpenses = (req, res) => {
   req.user.getExpenses().then((result) => {
     console.log(result);
-    console.log(req.user);
+    console.log("use r is", req.user);
     const data = result.map((ele) => ele.dataValues);
-    console.log(data);
+    // console.log();
 
-    res.json(data);
+    res.json({
+      expenses: data,
+      isPremiumUser: req.user.dataValues.isPremiumUser,
+    });
   });
 };
 

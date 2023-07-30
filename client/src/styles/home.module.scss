@@ -85,6 +85,29 @@ $desktop: 1024px;
       border: 2px solid purple;
     }
   }
+  .premiumMsg {
+    color: purple;
+    font-family: cursive;
+    font-weight: 700s;
+    padding-right: 2rem;
+  }
+  .leaderboardBtn {
+    color: purple;
+    font-family: cursive;
+    font-weight: 700s;
+    margin-right: 2rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 10px;
+    border: none;
+    border: 1px solid purple;
+    background-color: white;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: 0.2s;
+    &:hover {
+      scale: 1.04;
+    }
+  }
 }
 
 @media (max-width: 550px) {

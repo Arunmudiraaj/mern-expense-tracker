@@ -28,6 +28,7 @@ const AddExpense = (props) => {
           },
           { headers: { Authorization: token } }
         );
+        props.setIsPremium(true);
         alert("You are a premium user now!");
         props.toggle();
       },

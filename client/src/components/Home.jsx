@@ -10,19 +10,25 @@ import excel from "../assets/file-excel-2-line.svg";
 import { useState } from "react";
 import AddExpense from "./AddExpense";
 import BuyPremium from "./BuyPremium";
+import Leaderboard from "./Leaderboard";
 import axios from "axios";
 const Home = () => {
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const url = "http://localhost:8080/expenses";
   const [expenses, setExpenses] = useState([]);
   const [addExpense, setAddExpense] = useState(false);
   const [buyPremium, setBuyPremium] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const toggleModal = () => {
     setAddExpense((pre) => !pre);
   };
   const toggleBuyPremium = () => {
     setBuyPremium((pre) => !pre);
+  };
+  const toggleShowLeaderboard = () => {
+    setShowLeaderboard((pre) => !pre);
   };
   const addExpenseHandler = (obj) => {
     setTotalAmount((pre) => {
@@ -72,9 +78,10 @@ const Home = () => {
       })
       .then((res) => {
         console.log(res.data);
-        setExpenses(res.data);
+        setExpenses(res.data.expenses);
+        setIsPremiumUser(res.data.isPremiumUser);
         let total = 0;
-        for (const item of res.data) {
+        for (const item of res.data.expenses) {
           total += item.amount;
         }
         setTotalAmount(total);
@@ -88,14 +95,31 @@ const Home = () => {
   }, []);
   return (
     <div className={styles.container}>
-      <div className={styles.premium} onClick={toggleBuyPremium}>
+      <div className={styles.premium}>
         {" "}
-        <button className={styles.premiumBtn}>Buy Premium 👑</button>{" "}
+        {isPremiumUser ? (
+          <div className={styles.premiumFeatures}>
+            <div className={styles.premiumMsg}>You are a premium user</div>
+            <button
+              onClick={toggleShowLeaderboard}
+              className={styles.leaderboardBtn}
+            >
+              Show Leaderboard
+            </button>
+          </div>
+        ) : (
+          <button onClick={toggleBuyPremium} className={styles.premiumBtn}>
+            Buy Premium 👑
+          </button>
+        )}
       </div>
-      {buyPremium && <BuyPremium toggle={toggleBuyPremium} />}
+      {buyPremium && (
+        <BuyPremium toggle={toggleBuyPremium} setIsPremium={setIsPremiumUser} />
+      )}
       {addExpense && (
         <AddExpense toggle={toggleModal} add={addExpenseHandler} />
       )}
+      {showLeaderboard && <Leaderboard toggle={toggleShowLeaderboard} />}
       <div className={styles.options}>
         <Card
           className={styles.one}
