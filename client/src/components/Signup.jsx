@@ -5,15 +5,20 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import ForgotPassword from "./ForgotPassword";
 
 const signup = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = useState("signup");
+  const [forgotPassword, setForgotPassword] = useState(false);
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   const url = "http://localhost:8080/user";
+  const toggleForgotPassword = () => {
+    setForgotPassword((pre) => !pre);
+  };
   const authChangeHandler = () => {
     setAuth((pre) => {
       if (pre === "signup") return "login";
@@ -96,6 +101,7 @@ const signup = () => {
   };
   return (
     <>
+      {forgotPassword && <ForgotPassword toggle={toggleForgotPassword} />}
       <form onSubmit={formSubmitHandler} className={styles.container}>
         <img src={lock} style={{ width: "2rem" }} />
         <span className={styles.title}>
@@ -120,7 +126,12 @@ const signup = () => {
           />
         )}
         {auth === "login" && (
-          <span className={styles.forgotPassword}>Forgot password</span>
+          <span
+            onClick={toggleForgotPassword}
+            className={styles.forgotPassword}
+          >
+            Forgot password
+          </span>
         )}
         <button type="submit">{auth === "signup" ? "Sign Up" : "Login"}</button>
         <ToastContainer />
