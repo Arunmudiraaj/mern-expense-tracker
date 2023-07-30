@@ -1,4 +1,5 @@
 const Expense = require("../models/expenses");
+const sequelize = require("../util/database");
 module.exports.getAllExpenses = (req, res) => {
   req.user.getExpenses().then((result) => {
     console.log(result);
@@ -14,16 +15,18 @@ module.exports.getAllExpenses = (req, res) => {
 };
 
 module.exports.addExpense = async (req, res) => {
-  console.log("Add expense body id", req.body);
-  console.log(req.user);
+  const txn = await sequelize.transaction();
+  // console.log("Add expense body id", req.body);
+  // console.log(req.user);
   try {
-    const result = await req.user.createExpense(req.body);
+    const result = await req.user.createExpense(req.body, { transaction: txn });
     console.log(result);
     const newTotal = req.user.dataValues.totalExpenses
       ? parseInt(req.user.dataValues.totalExpenses) + parseInt(req.body.amount)
       : parseInt(req.body.amount);
-    await req.user.update({ totalExpenses: newTotal });
+    await req.user.update({ totalExpenses: newTotal }, { transaction: txn });
     res.json(result.dataValues);
+    await txn.commit();
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Something went wrong" });
@@ -31,6 +34,9 @@ module.exports.addExpense = async (req, res) => {
 };
 
 module.exports.deleteExpense = async (req, res) => {
+  const txn = await sequelize.transaction();
+  console.log("DELLETTed");
+
   try {
     const id = req.params.id;
     const toBeDeleted = await Expense.findOne({
@@ -40,14 +46,19 @@ module.exports.deleteExpense = async (req, res) => {
       },
     });
 
-    await toBeDeleted.destroy();
-    await req.user.update({
-      totalExpenses:
-        parseInt(req.user.dataValues.totalExpenses) -
-        parseInt(toBeDeleted.dataValues.amount),
-    });
+    await toBeDeleted.destroy({ transaction: txn });
+    await req.user.update(
+      {
+        totalExpenses:
+          parseInt(req.user.dataValues.totalExpenses) -
+          parseInt(toBeDeleted.dataValues.amount),
+      },
+      { transaction: txn }
+    );
+    await txn.commit();
     res.end();
   } catch (err) {
-    console.log(err);
+    console.log("ERR IS", err);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };

@@ -9,6 +9,7 @@ module.exports.authenticate = (req, res, next) => {
     User.findByPk(user.userId)
       .then((userRow) => {
         req.user = userRow;
+        console.log("IN middleware");
         next();
       })
       .catch((err) => {
