@@ -29,7 +29,7 @@ const Leaderboard = (props) => {
           <thead>
             <tr>
               <th>Id</th>
-              <th>Username🧑</th>
+              <th>Username</th>
               <th>Total Expenses</th>
             </tr>
           </thead>
@@ -38,7 +38,7 @@ const Leaderboard = (props) => {
               <tr key={item.id} className="tr">
                 <td>{item.id}</td>
                 <td>{item.userName}</td>
-                <td>💲{item.total_cost}</td>
+                <td>💲{item.totalExpenses}</td>
               </tr>
             ))}
           </tbody>

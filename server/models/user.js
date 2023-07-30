@@ -18,6 +18,7 @@ const User = sequelize.define("user", {
     allowNull: false,
   },
   userName: Sequelize.STRING,
+  totalExpenses: Sequelize.INTEGER,
   isPremiumUser: Sequelize.BOOLEAN,
 });
 
