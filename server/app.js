@@ -10,9 +10,11 @@ const passwordRoutes = require("./routes/password");
 const User = require("./models/user");
 const Expense = require("./models/expenses");
 const Order = require("./models/order");
+const ResetPassword = require("./models/resetPassword");
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/user", userRoutes);
 app.use("/expenses", expenseRoutes);
 app.use("/purchase", purchaseRoutes);
@@ -23,6 +25,10 @@ Expense.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(ResetPassword);
+ResetPassword.belongsTo(User);
+
 app.use((req, res) => {
   res.send("<h2>Error 404</h2>");
 });

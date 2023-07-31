@@ -16,10 +16,17 @@ const ForgotPassword = (props) => {
     // const data = await axios(url);
     const email = emailRef.current.value;
     try {
-      await axios.post(url, { Email: email });
+      await axios.post(url, { email: email });
       alert("Password reset link sent to your email!");
     } catch (e) {
-      alert("Something went wrong");
+      console.log(e);
+      if (e.response.data.message) {
+        alert(e.response.data.message);
+      } else {
+        alert("Something went wrong");
+      }
+    } finally {
+      props.toggle();
     }
   };
   return (
