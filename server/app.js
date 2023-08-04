@@ -11,6 +11,7 @@ const User = require("./models/user");
 const Expense = require("./models/expenses");
 const Order = require("./models/order");
 const ResetPassword = require("./models/resetPassword");
+const DownloadedFile = require("./models/downloadedFile");
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
@@ -29,6 +30,8 @@ Order.belongsTo(User);
 User.hasMany(ResetPassword);
 ResetPassword.belongsTo(User);
 
+User.hasMany(DownloadedFile);
+DownloadedFile.belongsTo(User);
 app.use((req, res) => {
   res.send("<h2>Error 404</h2>");
 });

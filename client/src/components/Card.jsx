@@ -7,7 +7,7 @@ const Card = (props) => {
       <div className={styles.left}>
         <span className={styles.title}>{props.title}</span>
         {props.btn ? (
-          <img className={styles.add} src={props.btn} onClick={props.open} />
+          <img className={styles.add} src={props.btn} onClick={props.action} />
         ) : (
           <span className={styles.value}>{props.value}</span>
         )}
