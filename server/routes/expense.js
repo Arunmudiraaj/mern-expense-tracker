@@ -15,7 +15,7 @@ routes.delete(
   expenseControllers.deleteExpense
 );
 routes.get(
-  "/page/:number",
+  "/page/:number/:perPage",
   authMiddleware.authenticate,
   expenseControllers.getExpenses
 );

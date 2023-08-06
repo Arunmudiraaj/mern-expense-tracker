@@ -65,7 +65,7 @@ module.exports.deleteExpense = async (req, res) => {
 
 module.exports.getExpenses = async (req, res) => {
   const pageNumber = Number(req.params.number);
-  const itemsPerPage = 3;
+  const itemsPerPage = Number(req.params.perPage);
   try {
     const totalExpenses = await Expense.count({
       where: { userId: req.user.id },
@@ -84,6 +84,7 @@ module.exports.getExpenses = async (req, res) => {
       nextPage: pageNumber + 1,
       previousPage: pageNumber - 1,
       lastPage: Math.ceil(totalExpenses / itemsPerPage),
+      limit: itemsPerPage,
     });
   } catch (err) {
     res.status(500).json({ error: err });

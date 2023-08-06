@@ -59,7 +59,7 @@ const AddExpense = (props) => {
             type="number"
             ref={amountRef}
           />
-          <select ref={categoryRef}>
+          <select className={styles.select} ref={categoryRef}>
             <option>Food</option>
             <option>Clothing</option>
             <option>Entertainment</option>

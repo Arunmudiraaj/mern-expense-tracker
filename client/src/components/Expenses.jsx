@@ -5,10 +5,12 @@ import styles from "../styles/expenses.module.scss";
 
 const Expenses = (props) => {
   const url = "http://localhost:8080/expenses";
+  const numbersArray = Array.from({ length: 45 }, (_, i) => i + 6);
   const [expensesState, setExpensesState] = useState({
     page: 1,
     maxPage: null,
     expensesData: [],
+    limit: localStorage.getItem("itemsperpage") || 5,
   });
 
   const nextPage = () => {
@@ -56,33 +58,73 @@ const Expenses = (props) => {
       });
   };
 
+  const pageLimitHandler = (e) => {
+    const limitExp = Number(e.target.value);
+    localStorage.setItem("itemsperpage", limitExp);
+    setExpensesState({ ...expensesState, limit: limitExp });
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const itemsPerPage = localStorage.getItem("itemsperpage") || 5;
     const getData = async () => {
       console.log("Page changed");
       try {
         const res = await axios(
-          `http://localhost:8080/expenses/page/${expensesState.page}`,
+          `http://localhost:8080/expenses/page/${expensesState.page}/${itemsPerPage}`,
           { headers: { Authorization: token } }
         );
         console.log(res);
-        setExpensesState(() => {
-          return {
-            expensesData: res.data.expenses,
-            page: res.data.currentpage,
-            maxPage: res.data.lastPage,
-          };
-        });
+        if (
+          expensesState.maxPage &&
+          expensesState.page > expensesState.maxPage
+        ) {
+          setExpensesState(() => {
+            return {
+              expensesData: res.data.expenses,
+              page: 1,
+              maxPage: res.data.lastPage,
+              limit: res.data.itemsPerPage,
+            };
+          });
+        } else {
+          setExpensesState(() => {
+            return {
+              expensesData: res.data.expenses,
+              page: res.data.currentpage,
+              maxPage: res.data.lastPage,
+              limit: res.data.itemsPerPage,
+            };
+          });
+        }
       } catch (err) {
         console.log(err);
       }
     };
 
     getData();
-  }, [expensesState.page]);
+  }, [expensesState.page, expensesState.limit]);
 
   return (
     <div>
+      <div className={styles.selectPage}>
+        <label htmlFor="numberSelect">Select Expenses per page</label>
+        <select
+          id="numberSelect"
+          className={styles.numberSelect}
+          name="numberSelect"
+          onChange={pageLimitHandler}
+          defaultValue={expensesState.limit || 5}
+        >
+          <option value="5">5</option>
+          {/* Generate options for numbers in the array */}
+          {numbersArray.map((number) => (
+            <option key={number} value={number}>
+              {number}
+            </option>
+          ))}
+        </select>
+      </div>
       <table className={styles.table}>
         <thead>
           <tr>

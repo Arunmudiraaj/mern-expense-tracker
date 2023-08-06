@@ -53,3 +53,20 @@
 .navNum {
   font-weight: 700;
 }
+.selectPage {
+  display: flex;
+  font-family: sans-serif;
+  padding-right: 2.5rem;
+  justify-content: flex-end;
+  gap: 15px;
+  align-items: center;
+
+  padding-bottom: 0.5rem;
+}
+.numberSelect {
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid #007bff;
+  outline: none;
+  padding: 5px 10px;
+}
