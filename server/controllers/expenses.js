@@ -62,3 +62,30 @@ module.exports.deleteExpense = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+module.exports.getExpenses = async (req, res) => {
+  const pageNumber = Number(req.params.number);
+  const itemsPerPage = 3;
+  try {
+    const totalExpenses = await Expense.count({
+      where: { userId: req.user.id },
+    });
+    const expenses = await req.user.getExpenses({
+      offset: (pageNumber - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    });
+
+    console.log(totalExpenses);
+    res.json({
+      currentpage: pageNumber,
+      expenses,
+      hasNextPage: totalExpenses > pageNumber * itemsPerPage,
+      hasPreviousPage: pageNumber > 1,
+      nextPage: pageNumber + 1,
+      previousPage: pageNumber - 1,
+      lastPage: Math.ceil(totalExpenses / itemsPerPage),
+    });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};

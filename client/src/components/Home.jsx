@@ -12,13 +12,13 @@ import AddExpense from "./AddExpense";
 import BuyPremium from "./BuyPremium";
 import Leaderboard from "./Leaderboard";
 import axios from "axios";
+import Expenses from "./Expenses";
 const Home = () => {
   const linkRef = useRef();
   const [isPremiumUser, setIsPremiumUser] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const url = "http://localhost:8080/expenses";
-  const [expenses, setExpenses] = useState([]);
   const [addExpense, setAddExpense] = useState(false);
   const [buyPremium, setBuyPremium] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -40,41 +40,15 @@ const Home = () => {
       newTotal = newTotal + parseInt(obj.amount);
       return newTotal;
     });
-
-    setExpenses((pre) => {
-      const newData = [...pre];
-      newData.push(obj);
-      return newData;
-    });
   };
-  const deleteExpenseHandler = (id) => {
-    const toBeDeleted = expenses.find((i) => i.id === id);
+  const reduceTotal = (amt) => {
     setTotalAmount((pre) => {
       let newTotal = pre;
-      newTotal = newTotal - toBeDeleted.amount;
+      newTotal = newTotal - parseInt(amt);
       return newTotal;
     });
-
-    setExpenses((pre) => {
-      const newData = pre.filter((item) => item.id !== id);
-      return newData;
-    });
   };
 
-  const deleteHandler = (id) => {
-    console.log(id);
-    axios
-      .delete(url + "/delete/" + id, {
-        headers: { Authorization: localStorage.getItem("token") },
-      })
-      .then((res) => {
-        deleteExpenseHandler(id);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert(err.response.data.message);
-      });
-  };
   const downloadHandler = () => {
     const token = localStorage.getItem("token");
     axios
@@ -99,7 +73,6 @@ const Home = () => {
       })
       .then((res) => {
         console.log(res.data);
-        setExpenses(res.data.expenses);
         setIsPremiumUser(res.data.isPremiumUser);
         let total = 0;
         for (const item of res.data.expenses) {
@@ -147,6 +120,7 @@ const Home = () => {
         btn: excel,
         action: toggleBuyPremium,
       };
+
   return (
     <div className={styles.container}>
       <a ref={linkRef} href="" style={{ display: "none" }}>
@@ -201,35 +175,8 @@ const Home = () => {
       </div>
       {/* table */}
       <h2 className={styles.listName}>--Your Expenses List--</h2>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((item) => (
-            <tr key={item.id} className="tr">
-              <td>{item.desc}</td>
-              <td>💲{item.amount}</td>
-              <td>{item.category}</td>
-              <td>
-                <button
-                  className={styles.deleteBtn}
-                  onClick={() => {
-                    deleteHandler(item.id);
-                  }}
-                >
-                  X
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+      <Expenses reduceTotalBy={reduceTotal} />
 
       {isPremiumUser && (
         <div className={styles.premiumDiv}>

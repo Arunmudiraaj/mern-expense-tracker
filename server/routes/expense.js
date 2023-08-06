@@ -14,4 +14,9 @@ routes.delete(
   authMiddleware.authenticate,
   expenseControllers.deleteExpense
 );
+routes.get(
+  "/page/:number",
+  authMiddleware.authenticate,
+  expenseControllers.getExpenses
+);
 module.exports = routes;
