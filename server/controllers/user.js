@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 function getJsonWebToken(id, name) {
+  console.log("Jwt key is", process.env.JWT_KEY);
   return jwt.sign({ userId: id, userName: name }, process.env.JWT_KEY);
 }
 module.exports.userSignUp = (req, res) => {
@@ -76,6 +77,7 @@ module.exports.userAuth = (req, res) => {
           res.status(500).json({ message: "Something went wrong" });
         }
         if (result) {
+          console.log("Login success");
           res.json({
             success: true,
             message: "User successfully logged in",
