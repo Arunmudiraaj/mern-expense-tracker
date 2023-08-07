@@ -36,5 +36,5 @@ app.use((req, res) => {
   res.send("<h2>Error 404</h2>");
 });
 sequelize.sync().then(() => {
-  app.listen(8080);
+  app.listen(process.env.PORT_NUMBER);
 });
