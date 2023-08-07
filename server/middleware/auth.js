@@ -4,7 +4,7 @@ module.exports.authenticate = (req, res, next) => {
   try {
     const token = req.header("Authorization");
     console.log(token);
-    const user = jwt.verify(token, "ArunSecretKey");
+    const user = jwt.verify(token, process.env.JWT_KEY);
     console.log(user);
     User.findByPk(user.userId)
       .then((userRow) => {

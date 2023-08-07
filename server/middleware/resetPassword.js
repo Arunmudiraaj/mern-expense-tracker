@@ -6,9 +6,10 @@ module.exports.resetPassword = (req, res, next) => {
     .then((user) => {
       console.log(user);
       if (!user) {
-        res
-          .status(501)
-          .json({ message: "User with the provided email does not exist" });
+        res.status(501).json({
+          message:
+            "User with the provided email does not have an account registered!",
+        });
         return;
       }
       req.user = user;

@@ -34,7 +34,6 @@ module.exports.forgotPassword = async (req, res) => {
       to: receivers,
       subject: "Reset password - [Expense Tracker]",
       htmlContent: `<div> <p>Reset your account's password using the given link</p> <a href='http://localhost:8080/password/forgotpassword/${uid}'>Click here to reset</a> </div>`,
-      //   textContent: `Hello Work PLZ Link : http://localhost:8080/password/forgotpassword/${uid}`,
     });
 
     console.log(result);

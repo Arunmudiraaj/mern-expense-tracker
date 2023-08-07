@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 function getJsonWebToken(id, name) {
-  return jwt.sign({ userId: id, userName: name }, "ArunSecretKey");
+  return jwt.sign({ userId: id, userName: name }, process.env.JWT_KEY);
 }
 module.exports.userSignUp = (req, res) => {
   const { userName, email, password } = req.body;
